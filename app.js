@@ -4,6 +4,9 @@ class PianoRollDisplay {
   constructor(csvURL) {
     this.csvURL = csvURL;
     this.data = null;
+
+    this.selectedContainer = document.getElementById('selected-container');
+    this.pianoRollContainer = document.getElementById('pianoRollContainer');
   }
 
   async loadPianoRollData() {
@@ -36,15 +39,46 @@ class PianoRollDisplay {
     // Append the SVG to the card container
     cardDiv.appendChild(svg);
 
+    this.selectPianoRoll();
+
     return { cardDiv, svg }
+  }
+
+  selectPianoRoll() {
+    const pianoRolls = document.querySelectorAll('.piano-roll-card');
+
+    pianoRolls.forEach((roll) => {
+      roll.addEventListener('click', (event) => {
+        const children = event.target.closest('.piano-roll-card');
+
+        pianoRolls.forEach(el => el.classList.remove('hide'));
+
+        this.selectedContainer.classList.add('selected-container_onn');
+        this.selectedContainer.innerHTML = '';
+        this.selectedContainer.appendChild(children.cloneNode(true));
+        this.pianoRollContainer.classList.add('col');
+        event.target.classList.add('hide');
+      });
+    });
+  }
+
+  returnGreed() {
+    const pianoRolls = document.querySelectorAll('.piano-roll-card');
+
+    this.selectedContainer.classList.remove('selected-container_onn');
+    this.selectedContainer.innerHTML = '';
+    this.pianoRollContainer.classList.remove('col');
+
+    pianoRolls.forEach((roll) => {
+      roll.classList.remove('hide');
+    })
   }
 
   async generateSVGs() {
     if (!this.data) await this.loadPianoRollData();
     if (!this.data) return;
-    
-    const pianoRollContainer = document.getElementById('pianoRollContainer');
-    pianoRollContainer.innerHTML = '';
+
+    this.pianoRollContainer.innerHTML = '';
     for (let it = 0; it < 20; it++) {
       const start = it * 60;
       const end = start + 60;
@@ -52,7 +86,7 @@ class PianoRollDisplay {
 
       const { cardDiv, svg } = this.preparePianoRollCard(it)
 
-      pianoRollContainer.appendChild(cardDiv);
+      this.pianoRollContainer.appendChild(cardDiv);
       const roll = new PianoRoll(svg, partData);
     }
   }
@@ -60,5 +94,6 @@ class PianoRollDisplay {
 
 document.getElementById('loadCSV').addEventListener('click', async () => {
   const csvToSVG = new PianoRollDisplay();
+  csvToSVG.returnGreed()
   await csvToSVG.generateSVGs();
 });
