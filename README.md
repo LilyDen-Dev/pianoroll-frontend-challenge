@@ -1,5 +1,7 @@
 # PianoRoll Frontend Task
 
+[PianoRoll video](https://github.com/LilyDen-Dev/pianoroll-frontend-challenge/releases/download/video/screen.webm "PianoRoll video")
+
 ## Introduction
 
 You will be building on top of a demo code that generates a widget for browsing Piano Rolls - the core element of [Piano Roll](https://pianoroll.io).
