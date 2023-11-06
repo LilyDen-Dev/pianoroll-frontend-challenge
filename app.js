@@ -1,4 +1,6 @@
 import PianoRoll from './pianoroll.js';
+import CardRoll from "./cardroll.js";
+import {hideCursor} from "./helpers.js";
 
 class PianoRollDisplay {
   constructor(csvURL) {
@@ -19,47 +21,6 @@ class PianoRollDisplay {
     } catch (error) {
       console.error('Error loading data:', error);
     }
-  }
-
-  preparePianoRollCard(rollId) {
-    const cardDiv = document.createElement('div');
-    cardDiv.classList.add('piano-roll-card');
-
-    // Create and append other elements to the card container as needed
-    const descriptionDiv = document.createElement('div');
-    descriptionDiv.classList.add('description');
-    descriptionDiv.textContent = `This is a piano roll number ${rollId}`;
-    cardDiv.appendChild(descriptionDiv);
-
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.classList.add('piano-roll-svg');
-    svg.setAttribute('width', '80%');
-    svg.setAttribute('height', '150');
-
-    // Append the SVG to the card container
-    cardDiv.appendChild(svg);
-
-    this.selectPianoRoll();
-
-    return { cardDiv, svg }
-  }
-
-  selectPianoRoll() {
-    const pianoRolls = document.querySelectorAll('.piano-roll-card');
-
-    pianoRolls.forEach((roll) => {
-      roll.addEventListener('click', (event) => {
-        const children = event.target.closest('.piano-roll-card');
-
-        pianoRolls.forEach(el => el.classList.remove('hide'));
-
-        this.selectedContainer.classList.add('selected-container_onn');
-        this.selectedContainer.innerHTML = '';
-        this.selectedContainer.appendChild(children.cloneNode(true));
-        this.pianoRollContainer.classList.add('col');
-        event.target.classList.add('hide');
-      });
-    });
   }
 
   returnGreed() {
@@ -83,8 +44,8 @@ class PianoRollDisplay {
       const start = it * 60;
       const end = start + 60;
       const partData = this.data.slice(start, end);
-
-      const { cardDiv, svg } = this.preparePianoRollCard(it)
+      const cardRoll = new CardRoll(it)
+      const {cardDiv, svg} = cardRoll.preparePianoRollCard()
 
       this.pianoRollContainer.appendChild(cardDiv);
       const roll = new PianoRoll(svg, partData);
@@ -94,6 +55,7 @@ class PianoRollDisplay {
 
 document.getElementById('loadCSV').addEventListener('click', async () => {
   const csvToSVG = new PianoRollDisplay();
-  csvToSVG.returnGreed()
+  csvToSVG.returnGreed();
+  hideCursor();
   await csvToSVG.generateSVGs();
 });

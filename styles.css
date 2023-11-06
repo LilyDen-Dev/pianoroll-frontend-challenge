@@ -158,3 +158,20 @@ button:hover {
     margin: 0 0 10px;
   }
 }
+
+#selection-area {
+  position: absolute;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed #000;
+  display: none;
+}
+
+#cursor-line {
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background-color: red;
+  display: none;
+  transition: left 0.1s ease-out;
+}
