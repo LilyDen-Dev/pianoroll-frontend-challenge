@@ -1,6 +1,6 @@
 import PianoRoll from './pianoroll.js';
 import CardRoll from "./cardroll.js";
-import {hideCursor} from "./helpers.js";
+import {hideCursor, removeSelected} from "./helpers.js";
 
 class PianoRollDisplay {
   constructor(csvURL) {
@@ -57,5 +57,6 @@ document.getElementById('loadCSV').addEventListener('click', async () => {
   const csvToSVG = new PianoRollDisplay();
   csvToSVG.returnGreed();
   hideCursor();
+  removeSelected();
   await csvToSVG.generateSVGs();
 });

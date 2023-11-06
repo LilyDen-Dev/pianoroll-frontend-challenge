@@ -4,3 +4,10 @@ export const hideCursor = () => {
     cursor.style.display = 'none';
   }
 }
+
+export const removeSelected = () => {
+  const selectionArea = document.getElementById('selection-area');
+  if (selectionArea.style.display === 'block') {
+    selectionArea.style.display = 'none';
+  }
+}
